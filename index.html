@@ -121,7 +121,10 @@ button:disabled {
 
   <form id="myForm">
     <input type="text" name="nama" placeholder="Nama Lengkap" required>
-    <input type="email" name="email" placeholder="Email" required>
+    <select name="ranting" id="rantingSelect" required>
+  <option value="">Memuat data ranting...</option>
+</select>
+
     <textarea name="pesan" placeholder="Tulis pesan..." rows="4" required></textarea>
 
     <button type="submit" id="submitBtn">
@@ -141,11 +144,36 @@ button:disabled {
 
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycbzjDJAttqnocj7nC93mKqRBI5bt7MgT4lRb87Q7b2rF7HqlFtMQlA8uKZwofy-LpmhMug/exec";
+
 const form = document.getElementById("myForm");
 const button = document.getElementById("submitBtn");
 const spinner = document.getElementById("spinner");
 const successMsg = document.getElementById("successMsg");
 const errorMsg = document.getElementById("errorMsg");
+const rantingSelect = document.getElementById("rantingSelect");
+
+/* ===============================
+   LOAD DROPDOWN DARI SHEET
+=================================*/
+
+fetch(scriptURL)
+  .then(res => res.json())
+  .then(data => {
+    rantingSelect.innerHTML = '<option value="">Pilih Ranting</option>';
+    data.forEach(ranting => {
+      let option = document.createElement("option");
+      option.value = ranting;
+      option.textContent = ranting;
+      rantingSelect.appendChild(option);
+    });
+  })
+  .catch(() => {
+    rantingSelect.innerHTML = '<option value="">Gagal memuat data</option>';
+  });
+
+/* ===============================
+   SUBMIT FORM
+=================================*/
 
 form.addEventListener("submit", function(e) {
   e.preventDefault();
@@ -177,6 +205,7 @@ form.addEventListener("submit", function(e) {
   });
 });
 </script>
+
 
 </body>
 </html>
