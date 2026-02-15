@@ -156,20 +156,26 @@ const rantingSelect = document.getElementById("rantingSelect");
    LOAD DROPDOWN DARI SHEET
 =================================*/
 
-fetch(scriptURL)
-  .then(res => res.json())
-  .then(data => {
-    rantingSelect.innerHTML = '<option value="">Pilih Ranting</option>';
-    data.forEach(ranting => {
-      let option = document.createElement("option");
-      option.value = ranting;
-      option.textContent = ranting;
-      rantingSelect.appendChild(option);
-    });
-  })
-  .catch(() => {
-    rantingSelect.innerHTML = '<option value="">Gagal memuat data</option>';
-  });
+fetch(scriptURL, {
+  method: "POST",
+  mode: "no-cors",
+  body: JSON.stringify(data),
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+.then(() => {
+  successMsg.style.display = "block";
+  form.reset();
+})
+.catch(() => {
+  errorMsg.style.display = "block";
+})
+.finally(() => {
+  button.disabled = false;
+  spinner.style.display = "none";
+});
+
 
 /* ===============================
    SUBMIT FORM
